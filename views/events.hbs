@@ -28,3 +28,91 @@
         </tbody>
     </table>
 </div>
+<div id="event-form-container">
+    <div>
+        <h2 id="form-banner">Add an event</h2>
+    </div>
+    <form action="/event" method="post">
+        <div>
+            <div>
+                <label for="event-title">Title:</label>
+            </div>
+            <div>
+                <input id="event-title" name="title" type="text" placeholder="Event Title"/>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label for="event-description">Description:</label>
+            </div>
+            <div>
+                <input id="event-description" name="description" type="text" placeholder="Event Description"/>
+            </div>
+        </div>
+        <div>
+            <div>
+                <label for="event-location">Location:</label>
+            </div>
+            <div>
+                <input id="event-location" name="location" type="text" placeholder="Event Location"/>
+            </div>
+        </div>
+        <div class="input-group.date">
+            <div>
+                <label for="event-date">Event Date:</label>
+            </div>
+            <div>
+                <input id="event-date" name="date" type="text" placeholder="Event Date"/>
+            </div>
+        </div>
+        <div>
+            <input type="submit"  value="submit" />
+            <input type="hidden" name="id" id="event-id" value="" />
+        </div>
+    </form>
+</div>
+<div id="delete_message">
+    <h2 class="delete-question">Are You Sure You Want To Delete This ID: </h2>
+    <input type="button" value="Delete" id="delete" class="delete-button-yes">
+    <input type="button" value="Cancel" id="cancel">
+</div>
+<script>
+    $(document).ready(function(){
+        $('#event-date').datepicker();
+        $('.like-button').on('click', (event => {$.post(`/event/like/${event.target.value}`, () => {location.reload()})}));
+        $('.dislike-button').on('click', (event => {$.post(`/event/dislike/${event.target.value}`, () => {location.reload()})}));
+        $('.edit-button').on('click', (event => {populateForm(event.target.value)}));
+        $(".delete-button").on('click', function(event){
+            deleteMessage(event.target.value);
+        });
+        $("#cancel").on('click', function(){
+            deleteHide();
+        });
+    });
+
+    function deleteMessage(id) {
+        console.log('Message - id: ', id);
+        $(".delete-question").text(`Are You Sure You Want To Delete This ID: ${id}`);
+        $("#delete_message").slideDown();
+        $('.delete-button-yes').on('click', (event => {$.post(`/event/delete/${id}`, () => {location.reload()})}));
+    }
+
+    function deleteHide() {
+        $("#delete_message").slideUp();
+    }
+
+    function populateForm(id) {
+        let evt = {};
+        evt.title = $(`#row-${id} td.title-${id}`).text();
+        evt.description = $(`#row-${id} td.description-${id}`).text();
+        evt.location = $(`#row-${id} td.location-${id}`).text();
+        evt.date = $(`#row-${id} td.date-${id}`).text();
+        console.log('evt: ', evt);
+        $('#form-banner').text('Modify an event');
+        $('#event-id').val(id);
+        $('#event-title').val(evt.title);
+        $('#event-description').val(evt.description);
+        $('#event-location').val(evt.location);
+        $('#event-date').val(evt.date);
+    }
+</script>
