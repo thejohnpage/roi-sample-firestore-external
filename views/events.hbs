@@ -1,19 +1,30 @@
-<ul >
-  {{#events}}
-    <li>
-        <h2>{{ title }}</h2>
-        <p>{{ description }}</p>
-        <p>Location: {{ location }}</p>
-        <p>Likes: {{ likes }}</p>
-        <form method="POST" action="/event/like">
-        <input type="hidden" value="{{id}}" name="id">
-        <input type="submit" value="Like">
-        </form>
-
-        <form method="POST" action="/event/unlike">
-        <input type="hidden" value="{{id}}" name="id">
-        <input type="submit" value="UN-Like">
-        </form>
-    </li>
-  {{/events}}
-</ul>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Likes</th>
+            <th>DisLikes</th>
+            <th>Controls</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#events}}
+            <tr id="row-{{id}}">
+                <td class="title-{{id}}">{{ title }}</td>
+                <td class="description-{{id}}">{{ description }}</td>
+                <td class="location-{{id}}">{{ location }}</td>
+                <td class="date-{{id}}">{{ date }}</td>
+                <td>{{ likes }}&nbsp;<button value="{{id}}" class="like-button">Like</button></td>
+                <td>{{ dislikes }}&nbsp;<button value="{{id}}" class="dislike-button">DisLike</button></td>
+                <td><button value="{{id}}" class="edit-button">Edit</button>&nbsp;&nbsp;
+                    <button value="{{id}}" class="delete-button">Delete</button>
+                </td>
+            </tr>
+        {{/events}}
+        </tbody>
+    </table>
+</div>
