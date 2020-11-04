@@ -106,7 +106,7 @@ app.post('/event',
 
 
 // defines a route that receives the post request to /event/like to like the event
-app.post('/event/like',
+app.post('/event/like/:id',
     urlencodedParser, // second argument - how to parse the uploaded content
     // into req.body
     (req, res) => {
@@ -118,7 +118,7 @@ app.post('/event/like',
         // changed to a put now that real data is being updated
         request.put(  // first argument: url + data + formats
             {
-                url: SERVER + '/event/like',  // the microservice end point for liking an event
+                url: `${SERVER}/event/like/${req.params.id}`,  // the microservice end point for liking an event
                 body: req.body,  // content of the form
                 headers: { // uploading json
                     "Content-Type": "application/json"
@@ -128,7 +128,30 @@ app.post('/event/like',
             () => {  
                 res.redirect("/"); // redirect to the home page on successful response
             });
+    });
 
+app.post('/event/dislike/:id',
+    urlencodedParser, // second argument - how to parse the uploaded content
+    // into req.body
+    (req, res) => {
+        // make a request to the backend microservice using the request package
+        // the URL for the backend service should be set in configuration
+        // using an environment variable. Here, the variable is passed
+        // to npm start inside package.json:
+        //  "start": "BACKEND_URL=http://localhost:8082 node server.js",
+        // changed to a put now that real data is being updated
+        request.put(  // first argument: url + data + formats
+            {
+                url: `${SERVER}/event/dislike/${req.params.id}`,  // the microservice end point for liking an event
+                body: req.body,  // content of the form
+                headers: { // uploading json
+                    "Content-Type": "application/json"
+                },
+                json: true // response from backend will be json format
+            },
+            () => {
+                res.redirect("/"); // redirect to the home page on successful response
+            });
     });
 
 
