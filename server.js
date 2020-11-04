@@ -156,7 +156,7 @@ app.post('/event/dislike/:id',
 
 
 // defines a route that receives the delete request to /event/like to unlike the event
-app.post('/event/unlike',
+app.post('/event/delete/:id',
     urlencodedParser, // second argument - how to parse the uploaded content
     // into req.body
     (req, res) => {
@@ -167,7 +167,7 @@ app.post('/event/unlike',
         //  "start": "BACKEND_URL=http://localhost:8082 node server.js",
         request.delete(  // first argument: url + data + formats
             {
-                url: SERVER + '/event/like',  // the microservice end point for liking an event
+                url: `${SERVER}/event/${req.params.id}`,  // the microservice end point for liking an event
                 body: req.body,  // content of the form
                 headers: { // uploading json
                     "Content-Type": "application/json"
