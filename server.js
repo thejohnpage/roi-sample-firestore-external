@@ -25,11 +25,12 @@ var request = require('request');
 // create the server
 const app = express();
 
-// set up handlbars as the templating engine
+// set up handlebars as the templating engine
 app.set('view engine', 'hbs');
 app.engine('hbs', hbs({
     extname: 'hbs',
-    defaultView: 'default'
+    defaultView: 'events',
+    defaultLayout: 'home'
 }));
 
 // set up the parser to get the contents of data from html forms 
@@ -57,7 +58,7 @@ app.get('/', (req, res) => {
                 console.log('error:', error); // Print the error if one occurred
                 res.render('error_message',
                     {
-                        layout: 'default',  //the outer html page
+                        layout: 'home',  //the outer html page
                         error: error // pass the data from the server to the template
                     });
             }
@@ -65,10 +66,10 @@ app.get('/', (req, res) => {
                 console.log('error:', error); // Print the error if one occurred
                 console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
                 console.log(body); // print the return from the server microservice
-                res.render('home',
+                res.render('events',
                     {
-                        layout: 'default',  //the outer html page
-                        template: 'index-template', // the partial view inserted into 
+                        layout: 'home',  //the outer html page
+                        // the partial view inserted into
                         // {{body}} in the layout - the code
                         // in here inserts values from the JSON
                         // received from the server
