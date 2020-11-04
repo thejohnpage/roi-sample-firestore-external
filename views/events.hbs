@@ -78,6 +78,7 @@
 </div>
 <script>
     $(document).ready(function(){
+        deleteHide();
         $('#event-date').datepicker();
         $('.like-button').on('click', (event => {$.post(`/event/like/${event.target.value}`, () => {location.reload()})}));
         $('.dislike-button').on('click', (event => {$.post(`/event/dislike/${event.target.value}`, () => {location.reload()})}));
