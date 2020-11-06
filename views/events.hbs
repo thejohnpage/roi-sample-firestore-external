@@ -8,7 +8,7 @@
             <th>Date</th>
             <th>Likes</th>
             <th>DisLikes</th>
-            <th>Controls</th>
+            <th>Controls <button class="add-button">Add</button></th>
         </tr>
         </thead>
         <tbody>
@@ -66,8 +66,11 @@
             </div>
         </div>
         <div>
-            <input type="submit"  value="submit" />
+            <button class="form-cancel-button">Cancel</button>
+            <input type="reset" value="Reset" />
+            <input class="form-submit-button" type="submit"  value="Submit" />
             <input type="hidden" name="id" id="event-id" value="" />
+            <input type="hidden" name="type" id="event-type" value="add" />
         </div>
     </form>
 </div>
@@ -78,14 +81,17 @@
 </div>
 <script>
     $(document).ready(function(){
-        deleteHide();
+        $('#delete_message').hide();
+        $('#event-form-container').hide();
         $('#event-date').datepicker();
         $('.like-button').on('click', (event => {$.post(`/event/like/${event.target.value}`, () => {location.reload()})}));
         $('.dislike-button').on('click', (event => {$.post(`/event/dislike/${event.target.value}`, () => {location.reload()})}));
-        $('.edit-button').on('click', (event => {populateForm(event.target.value)}));
+        $('.edit-button').on('click', (event => {populateForm(event.target.value); $('#event-form-container').show();}));
         $(".delete-button").on('click', function(event){
             deleteMessage(event.target.value);
         });
+        $('.add-button').on('click', (event => { $('#event-form-container').show();}))
+        $('.form-cancel-button').on('click', (event => {event.preventDefault(); $('#event-form-container').hide();}))
         $("#cancel").on('click', function(){
             deleteHide();
         });
@@ -103,6 +109,8 @@
     }
 
     function populateForm(id) {
+        $('#form-banner').text('Edit an Event');
+        $('#event-type').val('edit');
         let evt = {};
         evt.title = $(`#row-${id} td.title-${id}`).text();
         evt.description = $(`#row-${id} td.description-${id}`).text();

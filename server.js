@@ -84,24 +84,44 @@ app.post('/event',
     urlencodedParser, // second argument - how to parse the uploaded content
     // into req.body
     (req, res) => {
-        // make a request to the backend microservice using the request package
-        // the URL for the backend service should be set in configuration 
-        // using an environment variable. Here, the variable is passed 
-        // to npm start inside package.json:
-        //  "start": "SERVER=http://localhost:8082 node server.js",
-        request.post(  // first argument: url + data + formats
-            {
-                url: SERVER + '/event',  // the microservice end point for adding an event
+        console.log('type: ', req.body.type);
+        const type = req.body.type;
+        delete req.body.type;
+        console.log('Request Body: ', req.body);
+        if(type === 'add') {
+            // make a request to the backend microservice using the request package
+            // the URL for the backend service should be set in configuration 
+            // using an environment variable. Here, the variable is passed 
+            // to npm start inside package.json:
+            //  "start": "SERVER=http://localhost:8082 node server.js",
+            request.post(  // first argument: url + data + formats
+                {
+                    url: SERVER + '/event',  // the microservice end point for adding an event
+                    body: req.body,  // content of the form
+                    headers: { // uploading json
+                        "Content-Type": "application/json"
+                    },
+                    json: true // response from server will be json format
+                },
+                () => {  
+                    res.redirect("/"); // redirect to the home page on successful response
+                });
+        } else if(type === 'edit') {
+            request.put(  // first argument: url + data + formats 
+                {
+                url: `${SERVER}/event/${req.body.id}`,  // the microservice end point for liking an event
                 body: req.body,  // content of the form
                 headers: { // uploading json
                     "Content-Type": "application/json"
                 },
-                json: true // response from server will be json format
+                json: true // response from backend will be json format
             },
             () => {  
                 res.redirect("/"); // redirect to the home page on successful response
             });
-
+        } else {
+            res.redirect('/');
+        }
     });
 
 
