@@ -1,34 +1,4 @@
-<div>
-    <table>
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Location</th>
-            <th>Date</th>
-            <th>Likes</th>
-            <th>DisLikes</th>
-            <th>Controls <button class="add-button">Add</button></th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#events}}
-            <tr id="row-{{id}}">
-                <td class="title-{{id}}">{{ title }}</td>
-                <td class="description-{{id}}">{{ description }}</td>
-                <td class="location-{{id}}">{{ location }}</td>
-                <td class="date-{{id}}">{{ date }}</td>
-                <td>{{ likes }}&nbsp;<button value="{{id}}" class="like-button">Like</button></td>
-                <td>{{ dislikes }}&nbsp;<button value="{{id}}" class="dislike-button">DisLike</button></td>
-                <td><button value="{{id}}" class="edit-button">Edit</button>&nbsp;&nbsp;
-                    <button value="{{id}}" class="delete-button">Delete</button>
-                </td>
-            </tr>
-        {{/events}}
-        </tbody>
-    </table>
-</div>
-<div id="event-form-container">
+<div id="event-form-container" style="margin-bottom: 20px;">
     <div>
         <h2 id="form-banner">Add an event</h2>
     </div>
@@ -79,6 +49,36 @@
     <input type="button" value="Delete" id="delete" class="delete-button-yes">
     <input type="button" value="Cancel" id="cancel">
 </div>
+<div>
+    <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Location</th>
+            <th scope="col">Date</th>
+            <th scope="col">Likes</th>
+            <th scope="col">DisLikes</th>
+            <th scope="col">Controls <button class="add-button">Add</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#events}}
+            <tr id="row-{{id}}">
+                <td class="title-{{id}}">{{ title }}</td>
+                <td class="description-{{id}}">{{ description }}</td>
+                <td class="location-{{id}}">{{ location }}</td>
+                <td class="date-{{id}}">{{ date }}</td>
+                <td>{{ likes }}&nbsp;<button value="{{id}}" class="like-button">Like</button></td>
+                <td>{{ dislikes }}&nbsp;<button value="{{id}}" class="dislike-button">DisLike</button></td>
+                <td><button value="{{id}}" class="edit-button">Edit</button>&nbsp;&nbsp;
+                    <button value="{{id}}" class="delete-button">Delete</button>
+                </td>
+            </tr>
+        {{/events}}
+        </tbody>
+    </table>
+</div>
 <script>
     $(document).ready(function(){
         $('#delete_message').hide();
@@ -98,8 +98,7 @@
     });
 
     function deleteMessage(id) {
-        console.log('Message - id: ', id);
-        $(".delete-question").text(`Are You Sure You Want To Delete This ID: ${id}`);
+        $(".delete-question").text(`Are You Sure You Want To Delete this Event: ${getTitle(id)}`);
         $("#delete_message").slideDown();
         $('.delete-button-yes').on('click', (event => {$.post(`/event/delete/${id}`, () => {location.reload()})}));
     }
@@ -109,19 +108,20 @@
     }
 
     function populateForm(id) {
-        $('#form-banner').text('Edit an Event');
         $('#event-type').val('edit');
         let evt = {};
         evt.title = $(`#row-${id} td.title-${id}`).text();
         evt.description = $(`#row-${id} td.description-${id}`).text();
         evt.location = $(`#row-${id} td.location-${id}`).text();
         evt.date = $(`#row-${id} td.date-${id}`).text();
-        console.log('evt: ', evt);
         $('#form-banner').text('Modify an event');
         $('#event-id').val(id);
         $('#event-title').val(evt.title);
         $('#event-description').val(evt.description);
         $('#event-location').val(evt.location);
         $('#event-date').val(evt.date);
+    }
+    function getTitle(id) {
+        return $(`#row-${id} td.title-${id}`).text();
     }
 </script>

@@ -20,7 +20,7 @@ const hbs = require('express-handlebars');
 
 // request is used to make REST calls to the backend microservice
 // details here: https://www.npmjs.com/package/request
-var request = require('request');
+const request = require('request');
 
 // create the server
 const app = express();
